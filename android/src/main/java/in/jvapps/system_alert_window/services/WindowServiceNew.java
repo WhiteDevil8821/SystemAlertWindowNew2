@@ -191,6 +191,11 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                 throw new IllegalStateException("FlutterEngine not available");
             }
             engine.getLifecycleChannel().appIsResumed();
+
+            if (flutterView != null && flutterView.getParent() != null) {
+                ((ViewGroup) flutterView.getParent()).removeView(flutterView);
+            }
+            
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
             flutterView.attachToFlutterEngine(engine);
             flutterView.setFitsSystemWindows(true);
@@ -235,6 +240,11 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                 throw new IllegalStateException("FlutterEngine not available");
             }
             engine.getLifecycleChannel().appIsResumed();
+
+            if (flutterView != null && flutterView.getParent() != null) {
+                ((ViewGroup) flutterView.getParent()).removeView(flutterView);
+            }
+            
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
             flutterView.attachToFlutterEngine(engine);
             flutterView.setFitsSystemWindows(true);
