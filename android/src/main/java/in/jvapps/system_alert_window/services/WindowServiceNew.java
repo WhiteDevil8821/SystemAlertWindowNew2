@@ -36,6 +36,7 @@ import io.flutter.embedding.android.FlutterTextureView;
 import io.flutter.embedding.android.FlutterView;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.FlutterEngineCache;
+import android.view.ViewGroup;
 
 public class WindowServiceNew extends Service implements View.OnTouchListener {
 
