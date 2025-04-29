@@ -192,7 +192,7 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
             }
             engine.getLifecycleChannel().appIsResumed();
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(engine);
+            flutterView.attachToFlutterEngine(Objects.requireNonNull(engine));
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
@@ -236,7 +236,7 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
             }
             engine.getLifecycleChannel().appIsResumed();
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(engine);
+            flutterView.attachToFlutterEngine(Objects.requireNonNull(engine));
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
