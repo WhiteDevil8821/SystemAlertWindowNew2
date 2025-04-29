@@ -57,6 +57,7 @@ class SystemAlertWindow {
       int? height,
       String notificationTitle = "Title",
       String notificationBody = "Body",
+  String? flutterEngineId,
       SystemWindowPrefMode prefMode = SystemWindowPrefMode.DEFAULT,
       bool isDisableClicks = false,
       bool isFlagFocusable = false}) async {
@@ -64,6 +65,7 @@ class SystemAlertWindow {
       'gravity': Commons.getWindowGravity(gravity),
       'width': width ?? Constants.MATCH_PARENT,
       'height': height ?? Constants.WRAP_CONTENT,
+      if (flutterEngineId != null) 'flutter_engine_id': flutterEngineId,
       'isDisableClicks': isDisableClicks,
       'isFlagFocusable': isFlagFocusable
     };
@@ -86,6 +88,7 @@ class SystemAlertWindow {
       int? height,
       String notificationTitle = "Title",
       String notificationBody = "Body",
+  String? flutterEngineId,
       SystemWindowPrefMode prefMode = SystemWindowPrefMode.DEFAULT,
       bool isDisableClicks = false,
       bool isFlagFocusable = false}) async {
@@ -93,6 +96,7 @@ class SystemAlertWindow {
       'gravity': Commons.getWindowGravity(gravity),
       'width': width ?? Constants.MATCH_PARENT,
       'height': height ?? Constants.WRAP_CONTENT,
+      if (flutterEngineId != null) 'flutter_engine_id': flutterEngineId,
       'isDisableClicks': isDisableClicks,
       'isFlagFocusable': isFlagFocusable
     };

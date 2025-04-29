@@ -174,7 +174,15 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+    if (paramsMap.containsKey("flutter_engine_id")) {
+        Object id = paramsMap.get("flutter_engine_id");
+        if (id instanceof String) {
+            flutterEngineId = (String) id;
+        }
+    }
+    String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+    FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
@@ -206,7 +214,15 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+    if (paramsMap.containsKey("flutter_engine_id")) {
+        Object id = paramsMap.get("flutter_engine_id");
+        if (id instanceof String) {
+            flutterEngineId = (String) id;
+        }
+    }
+    String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+    FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
