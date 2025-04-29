@@ -36,7 +36,6 @@ import io.flutter.embedding.android.FlutterTextureView;
 import io.flutter.embedding.android.FlutterView;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.FlutterEngineCache;
-import android.view.ViewGroup;
 
 public class WindowServiceNew extends Service implements View.OnTouchListener {
 
@@ -170,12 +169,11 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void createWindow(HashMap<String, Object> paramsMap) {
-        try {
+        try{
             closeWindow(false);
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
-    
             String flutterEngineId = null;
             if (paramsMap.containsKey("flutter_engine_id")) {
                 Object id = paramsMap.get("flutter_engine_id");
@@ -183,34 +181,34 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                     flutterEngineId = (String) id;
                 }
             }
-    
             String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
             FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 LogUtils.getInstance().e(TAG, "FlutterEngine not found for ID: " + engineId);
                 return;
             }
-    
+            if (engine == null) {
+                throw new IllegalStateException("FlutterEngine not available");
+            }
             engine.getLifecycleChannel().appIsResumed();
-    
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(engine); // Use correct engine
+            flutterView.attachToFlutterEngine(Objects.requireNonNull(FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE)));
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
             flutterView.setBackgroundColor(Color.TRANSPARENT);
             flutterView.setOnTouchListener(this);
-    
-            if (flutterView.getParent() != null) {
-                ((ViewGroup) flutterView.getParent()).removeView(flutterView);
+            try {
+                windowManager.addView(flutterView, params);
+            } catch (Exception ex) {
+                LogUtils.getInstance().e(TAG, ex.toString());
+                retryCreateWindow(paramsMap);
             }
-    
-            windowManager.addView(flutterView, params);
-        } catch (Exception ex) {
-            LogUtils.getInstance().e(TAG, "createWindow " + ex.getMessage());
-            retryCreateWindow(paramsMap);
         }
-    }    
+        catch (Exception ex) {
+            LogUtils.getInstance().e(TAG, "createWindow " + ex.getMessage());
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void retryCreateWindow(HashMap<String, Object> paramsMap) {
@@ -220,7 +218,6 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
-    
             String flutterEngineId = null;
             if (paramsMap.containsKey("flutter_engine_id")) {
                 Object id = paramsMap.get("flutter_engine_id");
@@ -228,33 +225,28 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                     flutterEngineId = (String) id;
                 }
             }
-    
             String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
             FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 LogUtils.getInstance().e(TAG, "FlutterEngine not found for ID: " + engineId);
                 return;
             }
-    
+            if (engine == null) {
+                throw new IllegalStateException("FlutterEngine not available");
+            }
             engine.getLifecycleChannel().appIsResumed();
-    
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(engine);
+            flutterView.attachToFlutterEngine(Objects.requireNonNull(FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE)));
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
             flutterView.setBackgroundColor(Color.TRANSPARENT);
             flutterView.setOnTouchListener(this);
-    
-            if (flutterView.getParent() != null) {
-                ((ViewGroup) flutterView.getParent()).removeView(flutterView);
-            }
-    
             windowManager.addView(flutterView, params);
         } catch (Exception ex) {
-            LogUtils.getInstance().e(TAG, "retryCreateWindow " + ex.getMessage());
+            LogUtils.getInstance().e(TAG, "retryCreateWindow "  + ex.getMessage());
         }
-    }    
+    }
 
     private void updateWindow(HashMap<String, Object> paramsMap) {
         setWindowLayoutFromMap(paramsMap);
