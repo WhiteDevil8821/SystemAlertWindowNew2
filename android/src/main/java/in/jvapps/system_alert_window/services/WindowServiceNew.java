@@ -169,11 +169,13 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void createWindow(HashMap<String, Object> paramsMap) {
-        try{
+        try {
             closeWindow(false);
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
+    
+            // Extract flutterEngineId from paramsMap
             String flutterEngineId = null;
             if (paramsMap.containsKey("flutter_engine_id")) {
                 Object id = paramsMap.get("flutter_engine_id");
@@ -181,43 +183,51 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                     flutterEngineId = (String) id;
                 }
             }
+    
             String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+    
+            // Get the engine from cache
             FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 LogUtils.getInstance().e(TAG, "FlutterEngine not found for ID: " + engineId);
                 return;
             }
-            if (engine == null) {
-                throw new IllegalStateException("FlutterEngine not available");
-            }
+    
+            // Resume the Flutter engine
             engine.getLifecycleChannel().appIsResumed();
+    
+            // Create and attach FlutterView
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(Objects.requireNonNull(FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE)));
+            flutterView.attachToFlutterEngine(engine);
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
             flutterView.setBackgroundColor(Color.TRANSPARENT);
             flutterView.setOnTouchListener(this);
+    
             try {
                 windowManager.addView(flutterView, params);
             } catch (Exception ex) {
-                LogUtils.getInstance().e(TAG, ex.toString());
+                LogUtils.getInstance().e(TAG, "Error adding view to window: " + ex.getMessage());
                 retryCreateWindow(paramsMap);
             }
+    
+        } catch (Exception ex) {
+            LogUtils.getInstance().e(TAG, "createWindow exception: " + ex.getMessage());
         }
-        catch (Exception ex) {
-            LogUtils.getInstance().e(TAG, "createWindow " + ex.getMessage());
-        }
-    }
+    }    
 
     @SuppressLint("ClickableViewAccessibility")
     private void retryCreateWindow(HashMap<String, Object> paramsMap) {
         try {
             LogUtils.getInstance().d(TAG, "Retrying create window");
+    
             closeWindow(false);
             setWindowManager();
             setWindowLayoutFromMap(paramsMap);
             WindowManager.LayoutParams params = getLayoutParams();
+    
+            // Extract flutterEngineId from paramsMap
             String flutterEngineId = null;
             if (paramsMap.containsKey("flutter_engine_id")) {
                 Object id = paramsMap.get("flutter_engine_id");
@@ -225,28 +235,38 @@ public class WindowServiceNew extends Service implements View.OnTouchListener {
                     flutterEngineId = (String) id;
                 }
             }
+    
             String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+    
+            // Get the engine from cache
             FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 LogUtils.getInstance().e(TAG, "FlutterEngine not found for ID: " + engineId);
                 return;
             }
-            if (engine == null) {
-                throw new IllegalStateException("FlutterEngine not available");
-            }
+    
+            // Ensure engine is available
             engine.getLifecycleChannel().appIsResumed();
+    
+            // Create and attach FlutterView
             flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
-            flutterView.attachToFlutterEngine(Objects.requireNonNull(FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE)));
+            flutterView.attachToFlutterEngine(engine);
             flutterView.setFitsSystemWindows(true);
             flutterView.setFocusable(true);
             flutterView.setFocusableInTouchMode(true);
             flutterView.setBackgroundColor(Color.TRANSPARENT);
             flutterView.setOnTouchListener(this);
-            windowManager.addView(flutterView, params);
+    
+            try {
+                windowManager.addView(flutterView, params);
+            } catch (Exception ex) {
+                LogUtils.getInstance().e(TAG, "Error adding view to window: " + ex.getMessage());
+            }
+    
         } catch (Exception ex) {
-            LogUtils.getInstance().e(TAG, "retryCreateWindow "  + ex.getMessage());
+            LogUtils.getInstance().e(TAG, "retryCreateWindow exception: " + ex.getMessage());
         }
-    }
+    }    
 
     private void updateWindow(HashMap<String, Object> paramsMap) {
         setWindowLayoutFromMap(paramsMap);
