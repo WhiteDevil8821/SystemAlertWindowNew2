@@ -94,7 +94,15 @@ public class SystemAlertWindowPlugin implements FlutterPlugin, ActivityAware, Ba
         if (methodCallHandler != null) {
             methodCallHandler.setActivity(activityPluginBinding.getActivity());
             try {
-                FlutterEngine existingEngine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+                String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine existingEngine = FlutterEngineCache.getInstance().get(engineId);
                 if(existingEngine==null){
                     FlutterEngineGroup enn = new FlutterEngineGroup(context);
                     DartExecutor.DartEntrypoint dEntry = new DartExecutor.DartEntrypoint(
@@ -134,7 +142,15 @@ public class SystemAlertWindowPlugin implements FlutterPlugin, ActivityAware, Ba
     @Override
     public void onMessage(@Nullable Object message, @NonNull BasicMessageChannel.Reply<Object> reply) {
         try {
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }

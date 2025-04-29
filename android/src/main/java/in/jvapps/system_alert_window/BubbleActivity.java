@@ -36,7 +36,15 @@ public class BubbleActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
@@ -50,7 +58,15 @@ public class BubbleActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         try{
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
@@ -65,7 +81,15 @@ public class BubbleActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         try{
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
@@ -80,7 +104,15 @@ public class BubbleActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try{
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
@@ -96,7 +128,15 @@ public class BubbleActivity extends AppCompatActivity {
             LinearLayout linearLayout = new LinearLayout(mContext);
             linearLayout.setOrientation(LinearLayout.VERTICAL); // Set the orientation if needed
             linearLayout.setBackgroundColor(Color.WHITE);
-            FlutterEngine engine = FlutterEngineCache.getInstance().get(Constants.FLUTTER_CACHE_ENGINE);
+            String flutterEngineId = null;
+            if (paramsMap.containsKey("flutter_engine_id")) {
+                Object id = paramsMap.get("flutter_engine_id");
+                if (id instanceof String) {
+                    flutterEngineId = (String) id;
+                }
+            }
+            String engineId = flutterEngineId != null ? flutterEngineId : Constants.FLUTTER_CACHE_ENGINE;
+            FlutterEngine engine = FlutterEngineCache.getInstance().get(engineId);
             if (engine == null) {
                 throw new IllegalStateException("FlutterEngine not available");
             }
